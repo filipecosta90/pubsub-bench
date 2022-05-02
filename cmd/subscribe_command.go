@@ -17,7 +17,6 @@ package cmd
 
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
 	"github.com/codeperfio/pubsub-bench/cmd/subscribe"
 	"github.com/spf13/cobra"
@@ -171,17 +170,6 @@ func subcribeLogic(cmd *cobra.Command, args []string) {
 	close(stopChan)
 	// and wait for them both to reply back
 	wg.Wait()
-}
-
-func redisSubscriberSpecific() (*string, *bool, *string, *string, *string) {
-	// specific to redis
-	client_output_buffer_limit_pubsub := flag.String("client-output-buffer-limit-pubsub", "", "Specify client output buffer limits for clients subscribed to at least one pubsub channel or pattern. If the value specified is different that the one present on the DB, this setting will apply.")
-	distributeSubscribers := flag.Bool("oss-cluster-api-distribute-subscribers", false, "read cluster slots and distribute subscribers among them.")
-	host := flag.String("host", "127.0.0.1", "redis host.")
-	port := flag.String("port", "6379", "redis port.")
-	subscribers_placement := flag.String("subscribers-placement-per-channel", "dense", "(dense,sparse) dense - Place all subscribers to channel in a specific shard. sparse- spread the subscribers across as many shards possible, in a round-robin manner.")
-	flag.Parse()
-	return client_output_buffer_limit_pubsub, distributeSubscribers, host, port, subscribers_placement
 }
 
 func updateCLI(tick *time.Ticker, c chan os.Signal, message_limit int64, w *tabwriter.Writer, test_time int) (bool, time.Time, time.Duration, uint64, []float64) {

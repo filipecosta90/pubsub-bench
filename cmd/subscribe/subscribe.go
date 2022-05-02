@@ -9,8 +9,7 @@ import (
 
 var TotalMessages uint64
 
-
-func getClusterNodesFromArgs(port string, host string) ( nodes []string, node_subscriptions_count []int, err error ) {
+func getClusterNodesFromArgs(port string, host string) (nodes []string, node_subscriptions_count []int, err error) {
 	ports := strings.Split(port, ",")
 	for idx, nhost := range strings.Split(host, ",") {
 		node := fmt.Sprintf("%s:%s", nhost, ports[idx])
@@ -19,7 +18,6 @@ func getClusterNodesFromArgs(port string, host string) ( nodes []string, node_su
 	}
 	return
 }
-
 
 func getClusterNodesFromTopology(host string, port string) (nodes []string, node_subscriptions_count []int, err error) {
 	ports := strings.Split(port, ",")
@@ -36,7 +34,7 @@ func getClusterNodesFromTopology(host string, port string) (nodes []string, node
 		return
 	}
 	ctx := context.Background()
-	topology , err := client.Do(ctx, client.B().ClusterSlots().Build()).AsStrSlice()
+	topology, err := client.Do(ctx, client.B().ClusterSlots().Build()).AsStrSlice()
 	fmt.Println(topology)
 	return
 }

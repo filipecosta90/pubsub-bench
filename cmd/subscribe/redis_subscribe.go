@@ -20,7 +20,7 @@ func SubscriberRoutine(addr string, subscriberName string, channel string, print
 	msgCh := make(chan rueidis.PubSubMessage)
 	go func() {
 		for {
-			conn.Receive(context.Background(),sub,func(msg rueidis.PubSubMessage) {
+			conn.Receive(context.Background(), sub, func(msg rueidis.PubSubMessage) {
 				// handle the msg
 				msgCh <- msg
 			})
@@ -53,7 +53,7 @@ func BootstrapPubSub(addr string, subscriberName string, channel string) (rueidi
 
 	ctx := context.Background()
 
-	err = c.Do(ctx,c.B().ClientSetname().ConnectionName(subscriberName).Build()).Error()
+	err = c.Do(ctx, c.B().ClientSetname().ConnectionName(subscriberName).Build()).Error()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,7 +61,7 @@ func BootstrapPubSub(addr string, subscriberName string, channel string) (rueidi
 	return c, err
 }
 
-func RedisPubSubLogic(stopChan chan struct{}, wg *sync.WaitGroup, distributeSubscribers bool, host string, port string, client_output_buffer_limit_pubsub string, channel_maximum int, channel_minimum int, subscribers_per_channel int, subscribers_placement string, subscribe_prefix string, printMessages bool) () {
+func RedisPubSubLogic(stopChan chan struct{}, wg *sync.WaitGroup, distributeSubscribers bool, host string, port string, client_output_buffer_limit_pubsub string, channel_maximum int, channel_minimum int, subscribers_per_channel int, subscribers_placement string, subscribe_prefix string, printMessages bool) {
 	var nodes []string
 	var node_subscriptions_count []int
 	var err error
@@ -89,5 +89,3 @@ func RedisPubSubLogic(stopChan chan struct{}, wg *sync.WaitGroup, distributeSubs
 		}
 	}
 }
-
-

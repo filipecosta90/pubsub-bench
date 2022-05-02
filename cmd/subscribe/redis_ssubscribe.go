@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 )
 
-
 func ShardSubscriberRoutine(addr string, subscriberName string, channel string, printMessages bool, stop chan struct{}, wg *sync.WaitGroup) {
 	// tell the caller we've stopped
 	defer wg.Done()
@@ -21,7 +20,7 @@ func ShardSubscriberRoutine(addr string, subscriberName string, channel string, 
 	msgCh := make(chan rueidis.PubSubMessage)
 	go func() {
 		for {
-			conn.Receive(context.Background(),sub,func(msg rueidis.PubSubMessage) {
+			conn.Receive(context.Background(), sub, func(msg rueidis.PubSubMessage) {
 				// handle the msg
 				msgCh <- msg
 			})
@@ -42,7 +41,7 @@ func ShardSubscriberRoutine(addr string, subscriberName string, channel string, 
 	}
 }
 
-func RedisShardedPubSubLogic(stopChan chan struct{}, wg *sync.WaitGroup, distributeSubscribers bool, host string, port string, client_output_buffer_limit_pubsub string, channel_maximum, channel_minimum, subscribers_per_channel int, subscribers_placement string, subscribe_prefix string, printMessages bool) () {
+func RedisShardedPubSubLogic(stopChan chan struct{}, wg *sync.WaitGroup, distributeSubscribers bool, host string, port string, client_output_buffer_limit_pubsub string, channel_maximum, channel_minimum, subscribers_per_channel int, subscribers_placement string, subscribe_prefix string, printMessages bool) {
 	var nodes []string
 	var node_subscriptions_count []int
 	var err error
@@ -70,6 +69,3 @@ func RedisShardedPubSubLogic(stopChan chan struct{}, wg *sync.WaitGroup, distrib
 		}
 	}
 }
-
-
-
