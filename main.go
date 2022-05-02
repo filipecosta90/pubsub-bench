@@ -15,7 +15,9 @@ limitations under the License.
 */
 package main
 
-import "github.com/codeperfio/pubsub-bench/cmd"
+import (
+	"github.com/codeperfio/pubsub-bench/cmd"
+)
 
 func main() {
 	cmd.Execute()
