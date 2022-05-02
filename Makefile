@@ -1,5 +1,5 @@
 # Go parameters
-GOCMD=GO111MODULE=on go
+GOCMD=go
 GOBUILD=$(GOCMD) build
 GOINSTALL=$(GOCMD) install
 GOCLEAN=$(GOCMD) clean
@@ -11,7 +11,7 @@ GOFMT=$(GOCMD) fmt
 .PHONY: all test coverage
 all: test coverage build
 
-build:
+build: get
 	$(GOBUILD) .
 
 get:
