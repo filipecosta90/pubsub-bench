@@ -3,6 +3,10 @@
 
 This tool is meant to provide a rough estimate on how fast each Pub/Sub can process messages.
 
+Current Pub/Sub Systems supported:
+  - Redis Pub/Sub 
+  - Redis Sharded Pub/Sub (since Redis >= 7.0)
+
 When benchmarking a Pub/Sub Systems, we specifically require two distinct roles ( publishers and subscribers ) as benchmark participants - this repo contains code to mimic the publisher and subscriber workloads on Redis Pub/Sub.
 
 Several aspects can dictate the overall system performance, like the:
