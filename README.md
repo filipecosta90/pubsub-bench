@@ -6,7 +6,7 @@ This tool is meant to provide a rough estimate on how fast each Pub/Sub can proc
 When benchmarking a Pub/Sub Systems, we specifically require two distinct roles ( publishers and subscribers ) as benchmark participants - this repo contains code to mimic the publisher and subscriber workloads on Pub/Sub systems.
 
 
-** Current Pub/Sub Systems supported **:
+**Current Pub/Sub Systems supported**:
   - Redis Pub/Sub 
   - Redis Sharded Pub/Sub (since Redis >= 7.0)
 
