@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Docker Builds
 
 # Controls when the workflow will run
@@ -7,14 +5,12 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'master'
       - 'unstable'
       - 'v*.*.*'
     tags:
       - 'v*.*.*'
   pull_request:
     branches:
-      - 'master'
       - 'unstable'
       - 'v*.*.*'
 
