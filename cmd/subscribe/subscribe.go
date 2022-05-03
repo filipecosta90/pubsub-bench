@@ -34,7 +34,18 @@ func getClusterNodesFromTopology(host string, port string) (nodes []string, node
 		return
 	}
 	ctx := context.Background()
-	topology, err := client.Do(ctx, client.B().ClusterSlots().Build()).AsStrSlice()
-	fmt.Println(topology)
+
+	nodes = []string{}
+	node_subscriptions_count = []int{}
+	topology, err := client.Do(ctx, client.B().ClusterSlots().Build()).ToArray()
+	for _, message := range topology {
+		group, _ := message.ToArray()
+		firstNode, _ := group[2].ToArray()
+		host, _ := firstNode[0].ToString()
+		port, _ := firstNode[1].ToInt64()
+		node := fmt.Sprintf("%s:%d", host, port)
+		nodes = append(nodes, node)
+		node_subscriptions_count = append(node_subscriptions_count, 0)
+	}
 	return
 }

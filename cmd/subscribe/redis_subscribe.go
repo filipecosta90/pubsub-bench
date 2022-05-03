@@ -61,9 +61,10 @@ func BootstrapPubSub(addr string, subscriberName string, channel string) (rueidi
 	return c, err
 }
 
-func RedisPubSubLogic(stopChan chan struct{}, wg *sync.WaitGroup, distributeSubscribers bool, host string, port string, client_output_buffer_limit_pubsub string, channel_maximum int, channel_minimum int, subscribers_per_channel int, subscribers_placement string, subscribe_prefix string, printMessages bool) {
+func RedisPubSubLogic(debug int, stopChan chan struct{}, wg *sync.WaitGroup, distributeSubscribers bool, host string, port string, client_output_buffer_limit_pubsub string, channel_maximum int, channel_minimum int, subscribers_per_channel int, subscribers_placement string, subscribe_prefix string) {
 	var nodes []string
 	var node_subscriptions_count []int
+
 	var err error
 
 	if distributeSubscribers {
@@ -74,18 +75,31 @@ func RedisPubSubLogic(stopChan chan struct{}, wg *sync.WaitGroup, distributeSubs
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	log.Printf("Using the following nodes (total=%d) to connect %v", len(nodes), nodes)
+	printMessages := false
+	if debug >= 2 {
+		printMessages = true
+	}
 	if strings.Compare(subscribers_placement, "dense") == 0 {
 		for channel_id := channel_minimum; channel_id <= channel_maximum; channel_id++ {
 			for channel_subscriber_number := 1; channel_subscriber_number <= subscribers_per_channel; channel_subscriber_number++ {
 				nodes_pos := channel_id % len(nodes)
 				node_subscriptions_count[nodes_pos]++
 				addr := nodes[nodes_pos]
+
 				channel := fmt.Sprintf("%s%d", subscribe_prefix, channel_id)
 				subscriberName := fmt.Sprintf("subscriber#%d-%s%d", channel_subscriber_number, subscribe_prefix, channel_id)
+				if debug >= 1 {
+					log.Printf("Channel %s subcriber #%d using node=%d (%s)", channel, channel_subscriber_number, nodes_pos, addr)
+				}
 				wg.Add(1)
 				go SubscriberRoutine(addr, subscriberName, channel, printMessages, stopChan, wg)
 			}
+		}
+	}
+	if debug >= 1 {
+		for nodes_pos, count := range node_subscriptions_count {
+			log.Printf("Node %s total subscriptions=%d", nodes[nodes_pos], count)
 		}
 	}
 }

@@ -41,7 +41,7 @@ func ShardSubscriberRoutine(addr string, subscriberName string, channel string, 
 	}
 }
 
-func RedisShardedPubSubLogic(stopChan chan struct{}, wg *sync.WaitGroup, distributeSubscribers bool, host string, port string, client_output_buffer_limit_pubsub string, channel_maximum, channel_minimum, subscribers_per_channel int, subscribers_placement string, subscribe_prefix string, printMessages bool) {
+func RedisShardedPubSubLogic(debugLevel int, stopChan chan struct{}, wg *sync.WaitGroup, distributeSubscribers bool, host string, port string, client_output_buffer_limit_pubsub string, channel_maximum, channel_minimum, subscribers_per_channel int, subscribers_placement string, subscribe_prefix string) {
 	var nodes []string
 	var node_subscriptions_count []int
 	var err error
@@ -53,6 +53,10 @@ func RedisShardedPubSubLogic(stopChan chan struct{}, wg *sync.WaitGroup, distrib
 	}
 	if err != nil {
 		log.Fatal(err)
+	}
+	printMessages := false
+	if debugLevel >= 2 {
+		printMessages = true
 	}
 
 	if strings.Compare(subscribers_placement, "dense") == 0 {

@@ -55,7 +55,7 @@ func init() {
 	rootCmd.PersistentFlags().Int("messages", 0, "Number of total messages per subscriber per channel.")
 	rootCmd.PersistentFlags().Int("client-update-tick", 1, "client update tick.")
 	rootCmd.PersistentFlags().Int("test-time", 0, "Number of seconds to run the test, after receiving the first message.")
-	rootCmd.PersistentFlags().Bool("print-messages", false, "print messages.")
+	rootCmd.PersistentFlags().Int("debug-level", 0, "debug level. 0 - no debug; 1 - info; 2 - verbose.")
 
 	// specific to redis
 	rootCmd.PersistentFlags().Bool("oss-cluster-api-distribute-subscribers", false, "read cluster slots and distribute subscribers among them.")
@@ -89,7 +89,7 @@ func subcribeLogic(cmd *cobra.Command, args []string) {
 	host, _ := cmd.Flags().GetString("host")
 	port, _ := cmd.Flags().GetString("port")
 	subscribers_placement, _ := cmd.Flags().GetString("subscribers-placement-per-channel")
-	printMessages, _ := cmd.Flags().GetBool("print-messages")
+	debugLevel, _ := cmd.Flags().GetInt("debug-level")
 	distributeSubscribers, _ := cmd.Flags().GetBool("oss-cluster-api-distribute-subscribers")
 	channel_minimum, _ := cmd.Flags().GetInt("channel-minimum")
 	channel_maximum, _ := cmd.Flags().GetInt("channel-maximum")
@@ -116,11 +116,11 @@ func subcribeLogic(cmd *cobra.Command, args []string) {
 	switch system {
 	case redisPubSub:
 		{
-			subscribe.RedisPubSubLogic(stopChan, &wg, distributeSubscribers, host, port, client_output_buffer_limit_pubsub, channel_maximum, channel_minimum, subscribers_per_channel, subscribers_placement, subscribe_prefix, printMessages)
+			subscribe.RedisPubSubLogic(debugLevel, stopChan, &wg, distributeSubscribers, host, port, client_output_buffer_limit_pubsub, channel_maximum, channel_minimum, subscribers_per_channel, subscribers_placement, subscribe_prefix)
 		}
 	case redisShardedPubSub:
 		{
-			subscribe.RedisShardedPubSubLogic(stopChan, &wg, distributeSubscribers, host, port, client_output_buffer_limit_pubsub, channel_maximum, channel_minimum, subscribers_per_channel, subscribers_placement, subscribe_prefix, printMessages)
+			subscribe.RedisShardedPubSubLogic(debugLevel, stopChan, &wg, distributeSubscribers, host, port, client_output_buffer_limit_pubsub, channel_maximum, channel_minimum, subscribers_per_channel, subscribers_placement, subscribe_prefix)
 		}
 	}
 
