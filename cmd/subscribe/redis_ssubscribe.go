@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/rueian/rueidis"
-	"log"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -42,18 +41,7 @@ func ShardSubscriberRoutine(addr string, subscriberName string, channel string, 
 }
 
 func RedisShardedPubSubLogic(debugLevel int, stopChan chan struct{}, wg *sync.WaitGroup, distributeSubscribers bool, host string, port string, client_output_buffer_limit_pubsub string, channel_maximum, channel_minimum, subscribers_per_channel int, subscribers_placement string, subscribe_prefix string) {
-	var nodes []string
-	var node_subscriptions_count []int
-	var err error
-
-	if distributeSubscribers {
-		nodes, node_subscriptions_count, err = getClusterNodesFromTopology(host, port)
-	} else {
-		nodes, node_subscriptions_count, err = getClusterNodesFromArgs(port, host)
-	}
-	if err != nil {
-		log.Fatal(err)
-	}
+	nodes, node_subscriptions_count := getNodesInfo(distributeSubscribers, host, port)
 	printMessages := false
 	if debugLevel >= 2 {
 		printMessages = true

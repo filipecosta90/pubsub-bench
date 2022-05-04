@@ -26,6 +26,7 @@ pubsub-bench
 .vscode
 .project
 bin/
+utils/redis/*.conf
 
 # Binaries for programs and plugins
 *.exe

@@ -62,20 +62,7 @@ func BootstrapPubSub(addr string, subscriberName string, channel string) (rueidi
 }
 
 func RedisPubSubLogic(debug int, stopChan chan struct{}, wg *sync.WaitGroup, distributeSubscribers bool, host string, port string, client_output_buffer_limit_pubsub string, channel_maximum int, channel_minimum int, subscribers_per_channel int, subscribers_placement string, subscribe_prefix string) {
-	var nodes []string
-	var node_subscriptions_count []int
-
-	var err error
-
-	if distributeSubscribers {
-		nodes, node_subscriptions_count, err = getClusterNodesFromTopology(host, port)
-	} else {
-		nodes, node_subscriptions_count, err = getClusterNodesFromArgs(port, host)
-	}
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Printf("Using the following nodes (total=%d) to connect %v", len(nodes), nodes)
+	nodes, node_subscriptions_count := getNodesInfo(distributeSubscribers, host, port)
 	printMessages := false
 	if debug >= 2 {
 		printMessages = true
@@ -102,4 +89,22 @@ func RedisPubSubLogic(debug int, stopChan chan struct{}, wg *sync.WaitGroup, dis
 			log.Printf("Node %s total subscriptions=%d", nodes[nodes_pos], count)
 		}
 	}
+}
+
+func getNodesInfo(distributeSubscribers bool, host string, port string) ([]string, []int) {
+	var nodes []string
+	var node_subscriptions_count []int
+
+	var err error
+
+	if distributeSubscribers {
+		nodes, node_subscriptions_count, err = getClusterNodesFromTopology(host, port)
+	} else {
+		nodes, node_subscriptions_count, err = getClusterNodesFromArgs(port, host)
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("Using the following nodes (total=%d) to connect %v", len(nodes), nodes)
+	return nodes, node_subscriptions_count
 }
