@@ -27,12 +27,12 @@ if [ "$1" == "start" ]
 then
     while [ $((PORT < ENDPORT)) != "0" ]; do
         PORT=$((PORT+1))
-        CORE_START=$((CORE_START+1))
         echo "Starting redis-server on core $CORE port $PORT with extra args: \"$ADDITIONAL_OPTIONS\""
         AOF_PROPS="--appendonly no"
         RDB_PROPS="--dbfilename dump-${PORT}.rdb"
         [[ $AOF == 1 ]] && AOF_PROPS="--appendonly yes --appendfilename appendonly-${PORT}.aof"
         taskset -c $CORE_START $REDIS_SERVER_BIN --port $PORT  --protected-mode $PROTECTED_MODE --cluster-enabled yes --cluster-config-file nodes-${PORT}.conf --cluster-node-timeout $TIMEOUT ${RDB_PROPS} ${AOF_PROPS} --logfile ${PORT}.log --daemonize yes ${ADDITIONAL_OPTIONS}
+        CORE_START=$((CORE_START+1))
     done
     exit 0
 fi
