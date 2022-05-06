@@ -33,6 +33,28 @@ docker run --network=host codeperf/pubsub-bench:unstable pubsub-bench subscribe
 docker run --network=host codeperf/pubsub-bench:unstable pubsub-bench publish
 ```
 
+## Getting Started with prebuilt standalone binaries ( no Golang needed )
+
+If you don't have go on your machine and just want to use the produced binaries you can download the following prebuilt bins:
+
+
+| OS | Arch | Link |
+| :---         |     :---:      |          ---: |
+| Linux   | amd64  (64-bit X86)     | [pubsub-bench-v0.1.0-linux-amd64.tar.gz](https://github.com/filipecosta90/pubsub-bench/releases/download/v0.1.0/pubsub-bench-v0.1.0-linux-amd64.tar.gz)    |
+| Linux   | arm64 (64-bit ARM)     | [pubsub-bench-v0.1.0-linux-arm64.tar.gz](https://github.com/filipecosta90/pubsub-bench/releases/download/v0.1.0/pubsub-bench-v0.1.0-linux-arm64.tar.gz)    |
+| Darwin   | amd64  (64-bit X86)     | [pubsub-bench-v0.1.0-darwin-amd64.tar.gz](https://github.com/filipecosta90/pubsub-bench/releases/download/v0.1.0/pubsub-bench-v0.1.0-darwin-amd64.tar.gz)    |
+| Darwin   | arm64 (64-bit ARM)     | [pubsub-bench-v0.1.0-darwin-arm64.tar.gz](https://github.com/filipecosta90/pubsub-bench/releases/download/v0.1.0/pubsub-bench-v0.1.0-darwin-arm64.tar.gz)    |
+
+
+Here's an example on how to use the above links for a linux based amd64 machine:
+
+```bash
+# Fetch it 
+wget -c https://github.com/filipecosta90/pubsub-bench/releases/download/v0.1.0/pubsub-bench-v0.1.0-linux-amd64.tar.gz -O - | tar -xz
+
+# give it a try 
+./pubsub-bench subscribe --help
+```
 
 ## Getting Started building from source
 
