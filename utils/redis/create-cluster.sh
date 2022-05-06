@@ -48,6 +48,16 @@ then
     exit 0
 fi
 
+if [ "$1" == "hosts" ]
+then
+    while [ $((PORT < ENDPORT)) != "0" ]; do
+        PORT=$((PORT+1))
+        HOSTS="$HOSTS $CLUSTER_HOST:$PORT"
+    done
+    echo "HOSTS=\"$HOSTS\""
+    exit 0
+fi
+
 if [ "$1" == "stop" ]
 then
     while [ $((PORT < ENDPORT)) != "0" ]; do
@@ -114,6 +124,7 @@ echo "create [-f] -- Create a cluster using redis-cli --cluster create."
 echo "                  Note: to create a multi-node cluster pass the remote host:port pairs via the HOSTS env var."
 echo "                  Example: HOSTS=\"remote-ip:port1 remote-ip:port2\" ./create-cluster.sh create"
 echo "stop        -- Stop Redis Cluster instances."
+echo "hosts       -- Print the HOSTS env var."
 echo "watch       -- Show CLUSTER NODES output (first 30 lines) of first node."
 echo "tail <id>   -- Run tail -f of instance at base port + ID."
 echo "tailall     -- Run tail -f for all the log files at once."
